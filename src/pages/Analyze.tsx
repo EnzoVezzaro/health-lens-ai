@@ -5,7 +5,9 @@ import FileUpload from '@/components/uploader/FileUpload';
 import AnalysisResult, { AnalysisData } from '@/components/analysis/AnalysisResult';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { analyzeImage } from '@/services/openaiService';
+import { analyzeImage as openAIanalyze } from '@/services/openaiService';
+import { analyzeImage as grokAIanalyze } from '@/services/grokService';
+import { configs } from '@/config/config';
 
 const Analyze = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -17,6 +19,8 @@ const Analyze = () => {
     setFile(selectedFile);
     setResult(null);
   };
+
+  console.log('configs.grokenable: ', configs.grokenable);
 
   const handleAnalyze = async () => {
     if (!file) {
@@ -31,8 +35,8 @@ const Analyze = () => {
     setLoading(true);
     
     try {
-      // Process the file with OpenAI
-      const analysisResult = await analyzeImage(file);
+      // Process the file with AI
+      const analysisResult = configs.grokenable ? await grokAIanalyze(file) : await openAIanalyze(file);
       
       setResult(analysisResult);
       

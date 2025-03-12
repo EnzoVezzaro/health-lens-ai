@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 import { Info, AlertTriangle, Check, ExternalLink, ChevronDown, ChevronUp, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -83,7 +84,7 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ loading, result }) => {
 
       <Card className="mb-8 p-6 shadow-sm">
         <h3 className="text-lg font-medium text-gray-800 mb-3">Summary</h3>
-        <p className="text-gray-600">{result.summary}</p>
+        <ReactMarkdown>{result.summary}</ReactMarkdown>
       </Card>
 
       <div className="mb-8">
