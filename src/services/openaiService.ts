@@ -1,7 +1,8 @@
+
 import OpenAI from 'openai';
 import { AnalysisData } from '@/components/analysis/AnalysisResult';
 
-const OPENAI_API_KEY = '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';
+const OPENAI_API_KEY = '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';
 
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY,
