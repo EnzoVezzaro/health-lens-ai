@@ -1,4 +1,3 @@
-
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { AnalysisData } from '@/components/analysis/AnalysisResult';
@@ -14,7 +13,8 @@ export const generatePDF = async (result: AnalysisData, elementId: string): Prom
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
-    
+    const margin = 20; // 20mm margin
+
     // Capture the element as a canvas
     const canvas = await html2canvas(element, {
       scale: 2, // Higher scale for better quality
@@ -22,28 +22,28 @@ export const generatePDF = async (result: AnalysisData, elementId: string): Prom
       useCORS: true,
       allowTaint: true,
     });
-    
+
     const imgData = canvas.toDataURL('image/png');
     const imgProps = pdf.getImageProperties(imgData);
-    
-    // Calculate dimensions to fit the image within PDF
-    const ratio = Math.min(
-      pdfWidth / imgProps.width,
-      pdfHeight / imgProps.height
-    );
+
+    // Calculate image size while respecting margins
+    const maxWidth = pdfWidth - 2 * margin;
+    const maxHeight = pdfHeight - 2 * margin;
+    const ratio = Math.min(maxWidth / imgProps.width, maxHeight / imgProps.height);
+
     const imgWidth = imgProps.width * ratio;
     const imgHeight = imgProps.height * ratio;
-    
-    // Add image to PDF
+
+    // Center the image while keeping margins
     pdf.addImage(
       imgData,
       'PNG',
-      (pdfWidth - imgWidth) / 2, // Center image horizontally
-      10, // Top margin
+      margin, // Left margin
+      margin, // Top margin
       imgWidth,
       imgHeight
     );
-    
+
     // Add metadata
     pdf.setProperties({
       title: `Medical Report - ${result.documentType}`,
@@ -51,7 +51,7 @@ export const generatePDF = async (result: AnalysisData, elementId: string): Prom
       author: 'HealthLens AI',
       creator: 'HealthLens AI'
     });
-    
+
     // Save the PDF
     pdf.save(`medical-report-${Date.now()}.pdf`);
   } catch (error) {
