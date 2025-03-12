@@ -179,7 +179,6 @@ const FindingCard: React.FC<{ finding: Finding; index: number }> = ({ finding, i
           </div>
           <div className="mt-2 sm:mt-0">
             <span className="text-lg font-semibold text-gray-900">{finding.value}</span>
-            <span className="text-sm text-gray-500 ml-1">{finding.unit}</span>
           </div>
         </div>
         

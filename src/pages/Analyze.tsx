@@ -20,7 +20,7 @@ const Analyze = () => {
     setResult(null);
   };
 
-  console.log('configs.grokenable: ', configs.grokenable);
+  console.log('AI Configured: ', configs.grokenable ? 'GrokAI' : 'OpenAI');
 
   const handleAnalyze = async () => {
     if (!file) {

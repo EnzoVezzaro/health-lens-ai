@@ -19,48 +19,9 @@ export  const processMedicalData = (aiResponse: any | null): AnalysisData => {
   }
 
   const result = configs.grokenable ? aiResponse.choices[0].message.content : aiResponse
-  console.log('result: ', result);
+  // console.log('result: ', JSON.parse(result));
   
   // For simplicity, we're returning mock data
   // In a real implementation, you would parse the AI's text response
-  return {
-    documentType: "Comprehensive Blood Panel (This is a TEST)",
-    date: new Date().toISOString().split('T')[0],
-    summary: result,
-    findings: [
-      {
-        name: "Total Cholesterol",
-        value: "215",
-        unit: "mg/dL",
-        referenceRange: "125-200 mg/dL",
-        status: "abnormal",
-        explanation: "Your total cholesterol is slightly above the recommended range. This includes both LDL ('bad') and HDL ('good') cholesterol. Elevated cholesterol can contribute to cardiovascular risk over time."
-      },
-      {
-        name: "HDL Cholesterol",
-        value: "62",
-        unit: "mg/dL",
-        referenceRange: ">40 mg/dL",
-        status: "normal",
-        explanation: "Your HDL (good) cholesterol is at a healthy level. HDL helps remove other forms of cholesterol from your bloodstream."
-      },
-      // More findings would be extracted from the AI response
-    ],
-    terms: [
-      {
-        term: "Cholesterol",
-        definition: "A waxy substance found in your blood. While your body needs cholesterol to build healthy cells, high levels can increase your risk of heart disease."
-      },
-      {
-        term: "HDL",
-        definition: "High-Density Lipoprotein, often called 'good' cholesterol, helps remove other forms of cholesterol from your bloodstream."
-      },
-      // More terms would be extracted from the AI response
-    ],
-    recommendations: [
-      "Based on the analysis, consider discussing these results with your healthcare provider.",
-      "Regular follow-up testing may be recommended to monitor your health status.",
-      // More recommendations would be generated from the AI response
-    ]
-  };
+  return JSON.parse(result);
 };
