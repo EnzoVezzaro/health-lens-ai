@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Layout from '@/components/layout/Layout';
@@ -6,6 +5,7 @@ import FileUpload from '@/components/uploader/FileUpload';
 import AnalysisResult, { AnalysisData } from '@/components/analysis/AnalysisResult';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { analyzeImage } from '@/services/openaiService';
 
 const Analyze = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -30,99 +30,11 @@ const Analyze = () => {
 
     setLoading(true);
     
-    // Simulate API call with timeout
     try {
-      // In a real application, you would send the file to your backend API
-      // const formData = new FormData();
-      // formData.append('file', file);
-      // const response = await fetch('/api/analyze', {
-      //   method: 'POST',
-      //   body: formData,
-      // });
-      // const data = await response.json();
+      // Process the file with OpenAI
+      const analysisResult = await analyzeImage(file);
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      // Mock response data
-      const mockResult: AnalysisData = {
-        documentType: "Comprehensive Blood Panel",
-        date: "2023-10-15",
-        summary: "Overall, your blood test results are within normal ranges with the exception of slightly elevated cholesterol levels. Your blood counts are normal, liver and kidney function tests show no abnormalities, and your glucose level is within the normal range.",
-        findings: [
-          {
-            name: "Total Cholesterol",
-            value: "215",
-            unit: "mg/dL",
-            referenceRange: "125-200 mg/dL",
-            status: "abnormal",
-            explanation: "Your total cholesterol is slightly above the recommended range. This includes both LDL ('bad') and HDL ('good') cholesterol. Elevated cholesterol can contribute to cardiovascular risk over time."
-          },
-          {
-            name: "HDL Cholesterol",
-            value: "62",
-            unit: "mg/dL",
-            referenceRange: ">40 mg/dL",
-            status: "normal",
-            explanation: "Your HDL (good) cholesterol is at a healthy level. HDL helps remove other forms of cholesterol from your bloodstream."
-          },
-          {
-            name: "LDL Cholesterol",
-            value: "130",
-            unit: "mg/dL",
-            referenceRange: "<100 mg/dL",
-            status: "abnormal",
-            explanation: "Your LDL (bad) cholesterol is above the optimal range. High LDL can lead to plaque buildup in your arteries."
-          },
-          {
-            name: "Glucose (Fasting)",
-            value: "92",
-            unit: "mg/dL",
-            referenceRange: "70-99 mg/dL",
-            status: "normal",
-            explanation: "Your fasting blood glucose is within normal limits, which suggests normal blood sugar regulation."
-          },
-          {
-            name: "Hemoglobin",
-            value: "14.2",
-            unit: "g/dL",
-            referenceRange: "13.5-17.5 g/dL",
-            status: "normal",
-            explanation: "Your hemoglobin level is normal, indicating good oxygen-carrying capacity in your blood."
-          }
-        ],
-        terms: [
-          {
-            term: "Cholesterol",
-            definition: "A waxy substance found in your blood. While your body needs cholesterol to build healthy cells, high levels can increase your risk of heart disease."
-          },
-          {
-            term: "HDL (High-Density Lipoprotein)",
-            definition: "Often called 'good' cholesterol, HDL helps remove other forms of cholesterol from your bloodstream and carries it back to the liver."
-          },
-          {
-            term: "LDL (Low-Density Lipoprotein)",
-            definition: "Often called 'bad' cholesterol, high levels of LDL can lead to plaque buildup in your arteries, increasing risk of heart disease and stroke."
-          },
-          {
-            term: "Glucose",
-            definition: "A type of sugar that is your body's main source of energy. Abnormal levels can indicate diabetes or other metabolic issues."
-          },
-          {
-            term: "Hemoglobin",
-            definition: "A protein in red blood cells that carries oxygen from your lungs to the rest of your body. Low levels can indicate anemia."
-          }
-        ],
-        recommendations: [
-          "Consider dietary changes to help lower your cholesterol levels, such as reducing saturated fat intake and increasing fiber consumption.",
-          "Regular physical activity is recommended to help improve your cholesterol profile, particularly for raising HDL and lowering LDL.",
-          "Maintain a healthy weight through balanced diet and regular exercise.",
-          "Continue with regular health check-ups and follow-up with your healthcare provider to monitor your cholesterol levels.",
-          "Consider discussing with your doctor whether additional testing or treatment options might be appropriate based on your overall health profile and risk factors."
-        ]
-      };
-
-      setResult(mockResult);
+      setResult(analysisResult);
       
       toast({
         title: "Analysis complete",

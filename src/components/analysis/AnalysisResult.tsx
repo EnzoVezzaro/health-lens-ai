@@ -1,9 +1,10 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Info, AlertTriangle, Check, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { Info, AlertTriangle, Check, ExternalLink, ChevronDown, ChevronUp, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { generatePDF } from '@/utils/pdfUtils';
+import { useToast } from '@/hooks/use-toast';
 import {
   Accordion,
   AccordionContent,
@@ -40,6 +41,8 @@ interface Term {
 }
 
 const AnalysisResult: React.FC<AnalysisResultProps> = ({ loading, result }) => {
+  const { toast } = useToast();
+
   if (loading) {
     return <LoadingState />;
   }
@@ -48,8 +51,26 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ loading, result }) => {
     return null;
   }
 
+  const handleDownload = async () => {
+    try {
+      await generatePDF(result, 'analysis-report');
+      toast({
+        title: "Report downloaded",
+        description: "Your medical report has been successfully downloaded as a PDF",
+      });
+    } catch (error) {
+      console.error("Download error:", error);
+      toast({
+        title: "Download failed",
+        description: "There was an error generating your PDF. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <motion.div
+      id="analysis-report"
       className="w-full max-w-4xl mx-auto"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -112,7 +133,11 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ loading, result }) => {
 
       <div className="flex justify-center mt-10">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button className="bg-medical-600 hover:bg-medical-700">
+          <Button 
+            className="bg-medical-600 hover:bg-medical-700"
+            onClick={handleDownload}
+          >
+            <Download className="mr-2 h-4 w-4" />
             Download Report
           </Button>
         </motion.div>
