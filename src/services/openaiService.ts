@@ -1,9 +1,7 @@
-
 import OpenAI from 'openai';
 import { AnalysisData } from '@/components/analysis/AnalysisResult';
 
-// This would typically come from environment variables
-const OPENAI_API_KEY = 'your-openai-api-key';
+const OPENAI_API_KEY = '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';
 
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY,
